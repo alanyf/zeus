@@ -16,16 +16,11 @@ export default {
 	components: {
 		RouteLink
 	},
-	created(){
-		this.init();
-	},
 	mounted(){
 		
 	},
 	methods: {
-		init(){
-			
-		}
+		
 	},
 	
 }

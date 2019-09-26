@@ -4,8 +4,7 @@ import VueRouter from 'vue-router';
 import configRouter from './route';
 import App from './App.vue';
 import '@/utils/ajax';
-import '@/utils/url';
-import store from './store/index';
+// import '@/utils/url';
 
 Vue.use(VueRouter);
 
@@ -28,6 +27,5 @@ new Vue({
     render(h) {
         return h(App);
     },
-    store,
     router
 }).$mount('#app');

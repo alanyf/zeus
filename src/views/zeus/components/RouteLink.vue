@@ -24,6 +24,8 @@ export default {
 
 <style lang="less">
 .link-container{
+	position: absolute;
+	left: 30%;
 	a{
 		color: rgb(44, 104, 233);;
 		text-decoration: none;
