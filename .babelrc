@@ -1,0 +1,25 @@
+{
+  "presets": [
+      ["env",  {
+        "es2015": { "modules": false }
+      }],
+      "stage-2"
+  ],
+  "plugins": [
+      ["transform-runtime", {
+          "polyfill": true,
+      }],
+      "transform-vue-jsx",
+      ["import", {
+        "libraryName": "vant",
+        "libraryDirectory": "es",
+        "style": true
+      }]
+  ],
+  "env": {
+    "test": {
+      "presets": ["latest", "stage-2"],
+      "plugins": [ "istanbul" ]
+    }
+  }
+}
