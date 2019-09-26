@@ -1,11 +1,13 @@
 # Zeus
 
-## 简介
-前端vue技术栈工程模版
-作者：Alan
-创建时间：2019.09.26
+## Introduction
+A simple frontend vue project template.
 
-### 使用说明
+Author：Alan  
+
+Time：2019.09.26
+
+### How to use
 ``` bash
 git clone https://github.com/**
 cd **
@@ -19,5 +21,5 @@ npm run build
 npm run build --report
 ```
 
-### 功能介绍
+### Functions Introduction
 1. vue + webpack + vue-router + vuex
