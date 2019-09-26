@@ -1,11 +1,15 @@
 <template>
 <div class="index-container">
 	<Header class="header"/>
+	<div class="markdown">
+		<MarkdownDoc/>
+	</div>
 </div>
 </template>
 
 <script>
 import Header from '../../components/Header';
+import MarkdownDoc from '@/docs/test.md';
 export default {
 	name: 'Index',
 	data(){
@@ -20,7 +24,8 @@ export default {
 		
 	},
 	components: {
-		Header
+		Header,
+		MarkdownDoc
 	},
 	computed: {
 		
@@ -29,14 +34,11 @@ export default {
 </script>
 
 <style lang="less">
-
 	.index-container{
-		display: flex;
-		flex-direction: column;
-		width: 100%;
-		height: 100%;
-		font-size: 0.5rem;
-		background-color: #fff;
-		
+		.markdown{
+			width: 800px;
+			margin: 0 auto;
+			//overflow: hidden;
+		}
 	}
 </style>

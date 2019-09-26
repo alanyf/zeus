@@ -3,9 +3,9 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import configRouter from './route';
 import App from './App.vue';
+import DemoBlock from './components/DemoBlock';
 import '@/utils/ajax';
 // import '@/utils/url';
-
 Vue.use(VueRouter);
 
 let routeConfig = {
@@ -22,6 +22,7 @@ router.beforeEach((to, from, next) => {
     next();
 });
 
+Vue.component('demo-block', DemoBlock);
 /* eslint-disable no-new */
 new Vue({
     render(h) {
