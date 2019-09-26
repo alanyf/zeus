@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta content="telephone=no" name="format-detection" />
+    <% 
+        var CURRENT_ENV = htmlWebpackPlugin.options.currentEnv;
+        var BASE_URL = htmlWebpackPlugin.options.baseUrl;// 静态资源根url
+        var ENV_NAME = htmlWebpackPlugin.options.envName;// 环境名称
+        var BRANCH_NAME = htmlWebpackPlugin.options.curentBranch;// 分支名称
+    %>
+    <title>Zeus</title>
+    <script name="mount-env-variable">
+        // 环境变量挂载到window
+        window.CURRENT_ENV = "<%= CURRENT_ENV %>";
+        window.ENV_NAME = "<%= ENV_NAME %>";
+        window.BRANCH_NAME = "<%= BRANCH_NAME %>";
+    </script>
+    <link href="static/css/base.css"/>
+    <link rel="shortcut icon" href="static/icon/favicon.ico"/>
+    <!-- 项目打包的css -->
+    <% htmlWebpackPlugin.files.css.forEach(function(css){
+        var cssEntry = css;
+        %><link rel="stylesheet" type="text/css"  href="<%= cssEntry + '?_t=' + Date.now() %>">
+    <%})%>
+    <script type="text/javascript" src="static/js/vue.js"></script>
+    <body>
+        <div id="app"></div>
+        <!-- 项目打包的js，oa与prod过滤devTools开发工具 -->
+        <%
+        htmlWebpackPlugin.files.js.forEach(function(js){
+            var jsEntry = js;
+            %><script type="text/javascript" src="<%= jsEntry + '?_t=' + Date.now() %>"></script>
+        <%})%>
+    </body>
+</html>

@@ -4,15 +4,15 @@ import VueRouter from 'vue-router';
 import configRouter from './route';
 import App from './App.vue';
 import '@/utils/ajax';
-import '@/utils/url';
-import store from './store/index';
+import 'src/utils/ajax-mock.js';
+// import '@/utils/url';
 
 Vue.use(VueRouter);
 
 let routeConfig = {
     base: __dirname,
     routes: configRouter,
-    mode: 'history',
+    mode: 'hash',
     fallback: false
 };
 const router = new VueRouter(routeConfig);
@@ -28,6 +28,5 @@ new Vue({
     render(h) {
         return h(App);
     },
-    store,
     router
 }).$mount('#app');

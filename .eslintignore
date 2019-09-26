@@ -1,1 +1,4 @@
-build/*.js
+.DS_Store
+static/
+node_modules/
+.vscode/
