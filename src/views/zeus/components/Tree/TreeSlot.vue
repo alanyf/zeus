@@ -6,15 +6,15 @@
         }">
             <div class="isopen-icon" 
                 v-if="showIcon"
-                v-show="node.isLeafNode!==true"
-                @click="openTrigger(node)"
+                v-show="node.isFolder===true"
+                @click.stop="openTrigger(node)"
             >{{node.expand!==true? '+' : '-'}}</div>
             <div class="isopen-icon border-none" v-if="showIcon" v-show="node.isFolder!==true"></div>
             <div
                 class="text" 
                 @click="chooseNode(node)" 
                 :style="{
-                    color: (activeType==='color'&&node.active) ? activeColor : '',
+                    color: node.disable? '#aaa' : (activeType==='color'&&node.active) ? activeColor : '',
                     fontWeight: node.active?'bold':'normal'
                 }"
                 >{{node.text}}
@@ -69,23 +69,47 @@ export default {
         },
     },
     created(){
-        this.node = JSON.parse(JSON.stringify(this.option));
+        this.node = this.deepClone(this.option);
     },
     methods: {
         openTrigger(node){
+            if(node.disable){
+                return;
+            }
             this.$set(node, 'expand', !node.expand);
             this._BusEventForTree.$emit('toggleExpand', node, node.expand);
         },
         chooseNode(node){
-            if(node.noChosse){
+            if(node.disable){
                 return;
             }
-            this._BusEventForTree.$emit('changeSelectNode', node);
+            this.$set(node, 'active', true);
+            this._BusEventForTree.$emit('changeSelectNode', node)
+            //if(!this.showIcon && node.isFolder){
+            // if( node.isFolder){
+            //     setTimeout(()=>this.openTrigger(node), 500 );
+            // }
+            //setTimeout(()=>this._BusEventForTree.$emit('changeSelectNode', node), 200 )
+        },
+        deepClone(object){
+            return  JSON.parse(JSON.stringify(object));
         }
     },
     components: {
         
     },
+    watch: {
+        // options(newVal){
+        //     console.log(newVal.text);
+        //     return newVal;
+        // },
+        // option: {
+        //     render(){
+        //         alert('loop');
+        //     },
+        //     deep: true
+        // }
+    }
 }
 </script>
 

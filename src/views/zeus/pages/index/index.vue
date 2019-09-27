@@ -3,7 +3,17 @@
 	<Header class="header"/>
 	<div class="artical">
 		<div class="menu">
-			<Tree @select="select" @expand="expand"/>
+			<Tree 
+				:option="treeData"
+				:userPadding="20"
+				:showIcon="true"
+				activeColor="#3eaf7c"
+				activeType="color"
+				@select="select"
+				@expand="expand"
+				@shrink="shrink"
+				@click="click"
+			/>
 		</div>
 		<div class="content"></div>
 	</div>
@@ -17,7 +27,36 @@ export default {
 	name: 'Index',
 	data(){
 		return {
-			
+			treeData: [
+				{
+					text: '文件夹1',
+					id: 1,
+					expand: true,
+					children: [
+						{text: '叶子节点11', id: 11, to: '/md1'},
+						{text: '叶子节点12', id: 12, to: '/md2'},
+						{
+							text: '文件夹1-3',
+							id: 13,
+							expand: true,
+							children: [
+								{text: '叶子节点131', id: 131, to: '/md131'},
+								{text: '叶子节点132', id: 132, to: '/md132', disable: true},
+							]
+						}
+					]
+				},
+				{
+					text: '文件夹2',
+					id: 2,
+					expand: true,
+					children: [
+						{text: '叶子节点', id: 21, to: '/md3'},
+						{text: '叶子节点', id: 22, to: '/md4'}
+					]
+				},
+				{text: '叶子节点3', id: 228, to: '/md4'}
+			]
 		}
 	},
 	mounted(){
@@ -29,6 +68,12 @@ export default {
 		},
 		expand(node){
 			console.log('expand', node);
+		},
+		shrink(node){
+			console.log('shrink', node);
+		},
+		click(node){
+			//console.log('click', node);
 		}
 	},
 	components: {

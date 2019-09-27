@@ -5,10 +5,11 @@
                 <TreeSlot  
                     :option="node" 
                     :treeData="treeData" 
-                    @changeSelectNode="changeSelectNode" 
                     :showIcon="showIcon" 
                     :activeColor="activeColor"
                     :activeType="activeType"
+                    :userPadding="userPadding"
+                    @changeSelectNode="changeSelectNode" 
                 />
             </div>
         </div>
@@ -16,48 +17,38 @@
 </template>
 
 <script>
-const _treeData = [
-    {
-        text: '文件夹1',
-        id: 1,
-        expand: true,
-        children: [
-            {text: '叶子节点11', id: 11, to: '/md1'},
-            {text: '叶子节点12', id: 12, to: '/md2'},
-            {
-                text: '文件夹1-3',
-                id: 13,
-                expand: true,
-                children: [
-                    {text: '叶子节点131', id: 131, to: '/md131'},
-                    {text: '叶子节点132', id: 132, to: '/md132'},
-                ]
-            }
-        ]
-    },
-    {
-        text: '文件夹1',
-        id: 2,
-        expand: true,
-        children: [
-            {text: '叶子节点', id: 21, to: '/md3'},
-            {text: '叶子节点', id: 22, to: '/md4'}
-        ]
-    }
-];
+
 import TreeSlot from './TreeSlot';
 export default {
 	name: 'Tree',
 	data () {
 		return {
-            treeData: [], // 树的数据，数组
-            userPadding: 20, // 缩进距离
-            showIcon: false, // 是否显示展开|关闭按钮
+            treeData: [], // 树处理后的数据 
             hackReset: true, // 强制刷新子组件
-            activeColor: '#3eaf7c', // 选中响应颜色
-            activeType: 'color', // 选中响应方式字体颜色|背景颜色 'color'|'backgroundColor'
             selectNodeId: undefined, // 以选中的节点id
 		}
+    },
+    props: {
+        option: {
+            type: Object,
+            required: true
+        },
+        userPadding: {
+            type: String,
+            default: 20
+        },
+        showIcon: {
+            type: Boolean,
+            default: true
+        },
+        activeColor: {
+            type: String,
+            default: '#3eaf7c'
+        },
+        activeType: {
+            type: String,
+            default: 'color'
+        },
     },
     beforeCreate(){
         // 全局事件事件总线注册
@@ -70,8 +61,9 @@ export default {
         this._BusEventForTree.$on('toggleExpand', this.toggleExpand);
     },
     mounted(){
-        const result = recursionTraversal({id: -1, children: _treeData});
+        const result = recursionTraversal({id: -1, children: this.option});
         this.treeData = result.children;
+        console.log(this.option);
         function recursionTraversal(node, deepth = -1){
             if(node.children){
                 const children = node.children.map(e=>recursionTraversal(e, deepth+1));
@@ -97,7 +89,7 @@ export default {
             }
             this.selectNodeId = node.id;
             this.$emit('select', node);// 向父组件传递选中节点改变事件
-            this.traversalTree(e=>e.id !== node.id ? this.$set(e, 'active', false) :this.$set(e, 'active', true));
+            this.traversalTree(e=> this.$set(e, 'active', e.id === node.id));
             this.forceUpdateChildComponent();
         },
         toggleExpand(node, expand){
