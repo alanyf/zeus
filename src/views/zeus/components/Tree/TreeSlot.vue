@@ -1,7 +1,7 @@
 <template>
     <div class="tree-slot-container">
         <div class="tree-row" :style="{
-            paddingLeft: userPadding*node.level+'px', 
+            paddingLeft: userPadding*node._level+'px', 
             backgroundColor: (activeType==='backgroundColor'&&node.active) ? activeColor : ''
         }">
             <div class="isopen-icon" 
@@ -21,13 +21,14 @@
             </div>
         </div>
         <div v-if="node.children && node.expand===true">
-            <TreeSlot v-for="e in node.children" :key="e.id" 
+            <TreeSlot v-for="e in node.children" :key="e._uuid" 
                 :treeData="treeData"
-                :option="e" 
+                :node="e" 
                 :userPadding="userPadding"
                 :showIcon="showIcon"
                 :activeColor="activeColor"
                 :activeType="activeType"
+                :onlyIconExpand="onlyIconExpand"
             ></TreeSlot>
         </div>
     </div>
@@ -43,7 +44,7 @@ export default {
 		}
     },
     props: {
-        option: {
+        node: {
             type: Object,
             required: true
         },
@@ -51,64 +52,28 @@ export default {
             type: Array,
             required: true
         },
-        userPadding: {
-            type: String,
-            default: 20
-        },
-        showIcon: {
-            type: Boolean,
-            default: true
-        },
-        activeColor: {
-            type: String,
-            default: '#3eaf7c'
-        },
-        activeType: {
-            type: String,
-            default: 'color'
-        },
-    },
-    created(){
-        this.node = this.deepClone(this.option);
+        userPadding: String,
+        showIcon: Boolean,
+        activeColor: String,
+        activeType: String,
+        onlyIconExpand: Boolean
     },
     methods: {
         openTrigger(node){
             if(node.disable){
                 return;
             }
-            this.$set(node, 'expand', !node.expand);
-            this._BusEventForTree.$emit('toggleExpand', node, node.expand);
+            this._BusEventForTree.$emit('toggleExpand', node);
         },
         chooseNode(node){
             if(node.disable){
                 return;
             }
-            this.$set(node, 'active', true);
-            this._BusEventForTree.$emit('changeSelectNode', node)
-            //if(!this.showIcon && node.isFolder){
-            // if( node.isFolder){
-            //     setTimeout(()=>this.openTrigger(node), 500 );
-            // }
-            //setTimeout(()=>this._BusEventForTree.$emit('changeSelectNode', node), 200 )
-        },
-        deepClone(object){
-            return  JSON.parse(JSON.stringify(object));
+            this._BusEventForTree.$emit('changeSelectNode', node);
+            if(!this.showIcon && node.isFolder && !this.onlyIconExpand){
+                this.openTrigger(node);
+            }
         }
-    },
-    components: {
-        
-    },
-    watch: {
-        // options(newVal){
-        //     console.log(newVal.text);
-        //     return newVal;
-        // },
-        // option: {
-        //     render(){
-        //         alert('loop');
-        //     },
-        //     deep: true
-        // }
     }
 }
 </script>

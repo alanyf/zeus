@@ -1,19 +1,18 @@
 <template>
 	<div class="tree-container">
-        <div v-if="hackReset == true" >
-            <div class="" v-for="node in treeData" :key="node.id">
-                <TreeSlot  
-                    :option="node" 
-                    :treeData="treeData" 
-                    :showIcon="showIcon" 
-                    :activeColor="activeColor"
-                    :activeType="activeType"
-                    :userPadding="userPadding"
-                    @changeSelectNode="changeSelectNode" 
-                />
-            </div>
+        <div v-for="node in treeData" :key="node._uuid">
+            <TreeSlot  
+                :node="node" 
+                :treeData="treeData" 
+                :showIcon="showIcon" 
+                :activeColor="activeColor"
+                :activeType="activeType"
+                :userPadding="userPadding"
+                :onlyIconExpand="onlyIconExpand"
+                @changeSelectNode="changeSelectNode" 
+            />
         </div>
-	</div>
+    </div>
 </template>
 
 <script>
@@ -23,8 +22,7 @@ export default {
 	name: 'Tree',
 	data () {
 		return {
-            treeData: [], // 树处理后的数据 
-            hackReset: true, // 强制刷新子组件
+            treeData: [], // 树处理后的数据
             selectNodeId: undefined, // 以选中的节点id
 		}
     },
@@ -49,6 +47,10 @@ export default {
             type: String,
             default: 'color'
         },
+        onlyIconExpand: {
+            type: Boolean,
+            default: true
+        },
     },
     beforeCreate(){
         // 全局事件事件总线注册
@@ -61,57 +63,67 @@ export default {
         this._BusEventForTree.$on('toggleExpand', this.toggleExpand);
     },
     mounted(){
-        const result = recursionTraversal({id: -1, children: this.option});
-        this.treeData = result.children;
-        console.log(this.option);
-        function recursionTraversal(node, deepth = -1){
-            if(node.children){
-                const children = node.children.map(e=>recursionTraversal(e, deepth+1));
-                return Object.assign(node, {
-                    level: deepth,
-                    children: children,
-                    isFolder: true
-                });
-            }else{
-                return Object.assign(node, {level: deepth});
-            }
-        }
+        this.treeData = this.handleInputData(this.option);
+        this.levelTraversalTree();
     },
     methods: {
         isOpenIsonStr(node){
-            const result = (node.expand===true&&node.isLeafNode!==true)? '+' : '-';
-            return result;
+            return (node.expand===true&&node.isLeafNode!==true)? '+' : '-';
         },
         changeSelectNode(node){
             this.$emit('click', node);// 向父组件传递点击选中事件
-            if(this.selectNodeId === node.id){
+            if(this.selectNodeId === node._uuid){
                 return;
             }
-            this.selectNodeId = node.id;
+            this.selectNodeId = node._uuid;
             this.$emit('select', node);// 向父组件传递选中节点改变事件
-            this.traversalTree(e=> this.$set(e, 'active', e.id === node.id));
-            this.forceUpdateChildComponent();
+            this.traversalTree(e=> this.$set(e, 'active', e._uuid === node._uuid));
         },
         toggleExpand(node, expand){
+            this.traversalTree(e=> e._uuid === node._uuid&&this.$set(e, 'expand', !e.expand));
             this.$emit('toggleExpand', node);// 向父组件传递节点展开|关闭事件
-            expand === true ? this.$emit('expand', node) : this.$emit('shrink', node);
+            node.expand !== true ? this.$emit('expand', node) : this.$emit('shrink', node);
         },
         traversalTree(callback){
-            recursionTraversal({id: -1, children: this.treeData});
+            recursionTraversal({children: this.treeData});
             function recursionTraversal(node){
                 callback(node);
                 node.children&&node.children.forEach(e => recursionTraversal(e));
             }
         },
-        forceUpdateChildComponent(){
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true;
-            });
+        levelTraversalTree(callback){
+            const rootNode = {_uuid: 1, children: this.treeData};
+            const levelArray = [];
+            let index = 0;
+            levelArray.push(rootNode);
+            recursionTraversal(rootNode);
+            function recursionTraversal(node){
+                if(index>=levelArray.length){
+                    return;
+                }
+                node.children&&node.children.forEach((e, i) => {
+                    e._uuid = node._uuid*10 + i+1;
+                    levelArray.push(e);
+                });
+                recursionTraversal(levelArray[++index]);
+            }
+        },
+        handleInputData(_treeData){
+            const result = recursionTraversal({children: _treeData});
+            return result.children;
+            function recursionTraversal(node, deepth = -1){
+                if(node.children){
+                    const children = node.children.map(e=>recursionTraversal(e, deepth+1));
+                    return Object.assign(node, {
+                        _level: deepth,
+                        children: children,
+                        isFolder: true
+                    });
+                }else{
+                    return Object.assign(node, {_level: deepth});
+                }
+            }
         }
-    },
-    computed: {
-
     },
     components: {
         TreeSlot
