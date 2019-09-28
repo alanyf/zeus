@@ -38,6 +38,7 @@ export default {
         padding: 15px 20px;
         border-radius: 5px;
         color: #eee;
+        overflow: scroll;
         span{
             font-size: 14px;
             line-height: 18px;
