@@ -21,14 +21,14 @@ const _treeData = [
         text: '文件夹1',
         expand: true,
         children: [
-            {text: '叶子节点11', to: '/md1'},
-            {text: '叶子节点12', to: '/md2'},
+            {text: '叶子节点11'},
+            {text: '叶子节点12'},
             {
                 text: '文件夹1-3',
                 expand: true,
                 children: [
-                    {text: '叶子节点131', to: '/md131'},
-                    {text: '叶子节点132', to: '/md132', disable: true},
+                    {text: '叶子节点131'},
+                    {text: '叶子节点132', disable: true},
                 ]
             }
         ]
@@ -37,11 +37,11 @@ const _treeData = [
         text: '文件夹2',
         expand: true,
         children: [
-            {text: '叶子节点', to: '/md3'},
-            {text: '叶子节点', to: '/md4'}
+            {text: '树', to: '/zeus/index/markdown/tree'},
+            {text: '测试', to: '/zeus/index/markdown/test'}
         ]
     },
-    {text: '叶子节点3', to: '/md4'}
+    {text: '叶子节点3'}
 ]
 import Tree from './Tree/Tree';
 export default {
@@ -53,7 +53,8 @@ export default {
     },
     methods: {
 		select(node){
-			console.log('select', node);
+            console.log('select', node);
+            this.$router.push(node.to);
 		},
 		expand(node){
 			console.log('expand', node);
