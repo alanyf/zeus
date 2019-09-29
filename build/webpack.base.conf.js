@@ -83,7 +83,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin(),
+    //new VueLoaderPlugin(),
     new ProgressBarPlugin({
       format: 'build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds) : (:msg)',
       clear: false,

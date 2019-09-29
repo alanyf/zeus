@@ -2,20 +2,7 @@
 <div class="index-container">
 	<Header class="header"/>
 	<div class="artical">
-		<div class="menu">
-			<Tree 
-				:option="treeData"
-				:userPadding="20"
-				:showIcon="false"
-				:onlyIconExpand="false"
-				activeColor="#3eaf7c"
-				activeType="color"
-				@select="select"
-				@expand="expand"
-				@shrink="shrink"
-				@click="click"
-			/>
-		</div>
+		<div class="menu"><Menu/></div>
 		<div class="content"></div>
 	</div>
 </div>
@@ -23,60 +10,20 @@
 
 <script>
 import Header from '../../components/Header';
-import Tree from '../../components/Tree/Tree';
+import Menu from '../../components/Menu';
 export default {
 	name: 'Index',
 	data(){
 		return {
-			treeData: [
-				{
-					text: '文件夹1',
-					expand: true,
-					children: [
-						{text: '叶子节点11', to: '/md1'},
-						{text: '叶子节点12', to: '/md2'},
-						{
-							text: '文件夹1-3',
-							expand: true,
-							children: [
-								{text: '叶子节点131', to: '/md131'},
-								{text: '叶子节点132', to: '/md132', disable: true},
-							]
-						}
-					]
-				},
-				{
-					text: '文件夹2',
-					expand: true,
-					children: [
-						{text: '叶子节点', to: '/md3'},
-						{text: '叶子节点', to: '/md4'}
-					]
-				},
-				{text: '叶子节点3', to: '/md4'}
-			]
+			
 		}
 	},
 	mounted(){
 		
 	},
-	methods: {
-		select(node){
-			console.log('select', node);
-		},
-		expand(node){
-			console.log('expand', node);
-		},
-		shrink(node){
-			console.log('shrink', node);
-		},
-		click(node){
-			console.log('click', node);
-		}
-	},
 	components: {
 		Header,
-		Tree
+		Menu
 	},
 	computed: {
 		
