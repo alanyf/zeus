@@ -1,14 +1,25 @@
 # Zeus
 
-## Introduction
-A simple frontend vue project template.
+## 介绍
+> 作者：Alan  
+> 日期：2019.09.26  
+> 基于vue技术栈的前端项目基础脚手架  
 
-Author：Alan  
+### 技术栈
+```
+webpack + es6 + vue + vue-router + less + axios + mock
+```
 
-Time：2019.09.26
+### 功能
+1. 定制化`dev-server`
+2. `mock`模拟数据，本地环境的生产环境都可用
+3. `ajax`请求封装
+4. `html-plugin`多环境打包
+5. 生产环境打包后，可直接用于浏览器打开以及`github.io`部署
 
-### How to use
-``` bash
+
+### 使用方法
+```bash
 git clone https://github.com/**
 
 cd **
@@ -22,9 +33,4 @@ npm run dev
 # build for production with minification
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-### Functions Introduction
-1. vue + webpack + vue-router
